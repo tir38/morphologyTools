@@ -1,6 +1,6 @@
 Matlab and C++ tools 
 -
-for creating umbras and top surfaces
+for creating umbras and top surfaces of 2D images
 -
 *************************************
 
