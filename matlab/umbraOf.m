@@ -1,20 +1,39 @@
-function [output] = umbraOf(inputMap, resolution, paddingHeight)
+function [umbra] = umbraOf(image, resolution, verbose, paddingHeight)
 % Jason Atwood
 % 4/18/2012
 %
-% computes umbra of 2D input map (aka 'image')
+% usage:
+% [umbra] = umbraOf(image, resolution, verbose, paddingHeight)
 %
-% paddingHeight is absolute height (in units, not cells)
+% description:
+% Computes the umbra of a image (2D matrix). User can specify height
+% resolution (doesn't need to be same resolution as x,y dimesions of the
+% image). Can also pad above the largest "peak" with zeros creating an
+% umbra with z dimension greater than largest pixel intensity.
+% 
+% If plotting, this method requires that the calling method has already set
+% the current figure window.
+%
+% inputs:
+% - image           : [m x n] matrix of non-negative integers; input image
+% - resolution      : integer, sets the z resolution of the umbra
+% - verbose         : 0 or 1 determines plotting options: 0 = plotting off; 1 = plotting on 
+% - paddingHeight   : non-negative integer, desired max z dimension. For
+%                       padding above the umbra with zereos. 
+%
+% outputs:
+% - umbra : [m x n x p] matrix of 0 or 1; 
+%               where p = max(paddingHeight, maxHeightOfMap) * resolution
+%
+% subfuctions:
+% addBlock by Jason Atwood
 
-global verbose;
-
-% get input map dimensionality
-dimensions = size(inputMap);
+%% ========== code ===========
+% get input image dimensionality
+dimensions = size(image);
 dimensionality = size(dimensions);
-maxHeightOfMap = max(max(inputMap));
+maxHeightOfMap = max(max(image));
 maxHeightInCells = ceil(maxHeightOfMap /resolution); % convert height to number of cells (round up)
-
-% NOT have a "zero" layer
 
 % check dimensionality
 if dimensionality ~= 2
@@ -22,7 +41,7 @@ if dimensionality ~= 2
     return
 end
 
-% I might need to pad output "above" maxHeight with zeros.
+% pad umbra upto maxHeight with zeros.
 if (exist('paddingHeight'))
     paddingHeightInCells = ceil(paddingHeight/resolution);
     
@@ -34,23 +53,26 @@ if (exist('paddingHeight'))
     end
 end
 
-% initialize output 3D matrix, fill with zeros
-output = zeros([dimensions(1), dimensions(2), maxHeightInCells]);
+% initialize umbra 3D matrix, fill with zeros
+umbra = zeros([dimensions(1), dimensions(2), maxHeightInCells]);
 
-% iterate through each element of inputMap and "fill in" all cells under it
+% iterate through each element of image and "fill in" all cells under it
 for i = 1:dimensions(1)
     for j = 1: dimensions(2)
         
-        heightInCells = ceil(inputMap(i,j) /resolution); % convert height to number of cells (round up)
+        heightInCells = ceil(image(i,j) /resolution); % convert height to number of cells (round up)
         if heightInCells > 0
         
             for k = 1:heightInCells
-                output(i,j,k) = 1;
+                umbra(i,j,k) = 1;
 
                 % add cell to plot
                 if verbose == 1
                     corner = [i, j, k];
-                    addBlock(corner, resolution, maxHeightInCells);
+                    % set block color
+                    heightPercentage = (k+1)/(maxHeightInCells+2);
+                    color = [heightPercentage, heightPercentage, heightPercentage]; % greyscal intensity is dependent on height of block
+                    addBlock(corner, resolution, color);
                     hold on; % must hold after addBlock for next plot
                     view(110,75); % set viewpoint, so that looks close to a imshow of the initial image
                 end
