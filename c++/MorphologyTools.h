@@ -6,18 +6,10 @@ using namespace std;
 #include <stdint.h>
 #include "Defs4MorphologyTools.h"
 
-class MorphologyTools
-{
-public:
-    MorphologyTools(); // constructor
 
-    ~MorphologyTools(); // destructor
+    UMBRA* umbraOf(std::vector<int> inputImage, int xDim, int yDim, int zDim);
 
-    bool myFunct();
+    IMAGE* topSurfaceOf(UMBRA* inputUmbra);
 
-    UMBRA* umbraOf(std::vector<uint8_t> inputMap, int xDim, int yDim, int zDim);
-
-    MAP* topSurfaceOf(UMBRA* inputUmbra, int xDim, int yDim, int zDim);
-};
 #endif // MORPHOLOGYTOOLS_H
 

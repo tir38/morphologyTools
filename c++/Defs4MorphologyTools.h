@@ -7,44 +7,38 @@ using namespace std;
 
 
 
-struct UMBRA { // for gradient vehicle kernel
+struct UMBRA {
     //class methods
-    UMBRA();                                // constructor
-
-    UMBRA(uint8_t col, uint8_t row, uint8_t height); // constructor w/ size inputs
-
-    ~UMBRA();                               // destructor
-
-//    UMBRA& operator=(const UMBRA& rhs){
-//        // don't need this yet
-//    }
+    UMBRA();                                            // constructor
+    UMBRA(int col, int row, int height);    // constructor w/ size inputs
+    ~UMBRA();                                           // destructor
 
     // member variables
     int colDim_;
     int rowDim_;
     int heightDim_;
-    std::vector<uint8_t> umbra; // 1D vector containing row-major (then column, then height) representation of 3D matrix
+    std::vector<int> umbra_; // 1D vector containing row-major (then column, then height) representation of 3D matrix
 };
 
 
 
-struct MAP{  // for single vehicle kernel or single configuration map
+struct IMAGE{
     // class methods
-    MAP();                      // constructor with no inputs
-    MAP(uint8_t col, uint8_t row);    // constructor with dimension inputs
-    ~MAP();                     // destructor
+    IMAGE();                            // constructor with no inputs
+    IMAGE(int col, int row);    // constructor with dimension inputs
+    ~IMAGE();                           // destructor
 
-    MAP& operator= (const MAP& rhs){ // define '=' operator
-        this->map       = rhs.map;
+    IMAGE& operator= (const IMAGE& rhs){ // define '=' operator
+        this->image_    = rhs.image_;
         this->colDim_   = rhs.colDim_;
         this->rowDim_   = rhs.rowDim_;
         return *this;
     }
 
     // member variables
-    std::vector<uint8_t> map;   // vector to store 2D map in row-major order
-    int colDim_;                // column dimension; needed to resize 1D 'map' into 2D
-    int rowDim_;                // row dimension; needed to resize 1D 'map' into 2D
+    int colDim_;                    // column dimension; needed to resize 1D vector into 2D image
+    int rowDim_;                    // row dimension; needed to resize 1D vector into 2D image
+    std::vector<int> image_;    // vector to store 2D image in row-major order
 };
 
 #endif // DEFS4MORPHOLOGYTOOLS_H
