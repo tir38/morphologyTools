@@ -16,7 +16,8 @@ Two structures are included to help with the book keeping: IMAGE and UMBRA.
 
 To demo the code:
 
-```make
+```
+make
 ./morphologyTools
 ```
 The wrapper uses SDL and SDL-image to load and display an image. It is not used buy
